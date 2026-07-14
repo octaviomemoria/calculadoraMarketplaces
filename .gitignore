@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# testing
+coverage/
+
+# capacitor (native project generated later)
+android/
+ios/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# env
+.env*.local
+
+# typescript
+next-env.d.ts
+*.tsbuildinfo
+
+# claude code local state
+.claude/scheduled_tasks.lock
