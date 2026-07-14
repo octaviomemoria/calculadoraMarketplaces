@@ -1,9 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { CurrencyInput } from "@/components/ui/CurrencyInput";
 import { PercentInput } from "@/components/ui/PercentInput";
 import { Button } from "@/components/ui/Button";
 import type { CustomFee, MarketplaceChannel } from "@/lib/pricing/types";
+import {
+  calcularSubsidioFretePreset,
+  FAIXA_PRECO_LABELS,
+  REPUTACAO_LABELS,
+  type FaixaPreco,
+  type NivelReputacao,
+} from "@/lib/pricing/shippingPresets";
 
 export function ChannelForm({
   channel,
@@ -13,6 +21,13 @@ export function ChannelForm({
   onChange: (patch: Partial<MarketplaceChannel>) => void;
 }) {
   const taxas = channel.taxasPersonalizadas ?? [];
+  const [reputacao, setReputacao] = useState<NivelReputacao>("verde_mercadolider");
+  const [faixaPreco, setFaixaPreco] = useState<FaixaPreco>("acima_79");
+
+  function aplicarPresetFrete() {
+    const subsidio = calcularSubsidioFretePreset(channel.custoFrete, faixaPreco, reputacao);
+    onChange({ subsidioFrete: Math.round(subsidio * 100) / 100 });
+  }
 
   function updateFee(id: string, patch: Partial<CustomFee>) {
     onChange({ taxasPersonalizadas: taxas.map((f) => (f.id === id ? { ...f, ...patch } : f)) });
@@ -100,6 +115,43 @@ export function ChannelForm({
         </div>
       </div>
     </div>
+
+      <div className="flex flex-col gap-2 rounded-lg border border-warning-bg bg-warning-bg/40 p-3">
+        <span className="text-sm font-medium text-text">Preset de frete grátis por reputação</span>
+        <p className="text-xs text-text-muted">
+          Baseado em regras de referência do Mercado Livre (não confirmadas na página oficial —
+          o acesso automatizado foi bloqueado). Confira os percentuais na sua própria conta antes
+          de confiar. Preenche o campo &ldquo;Subsídio de frete do marketplace&rdquo; a partir do
+          &ldquo;Custo de frete&rdquo; já informado acima.
+        </p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <select
+            value={reputacao}
+            onChange={(e) => setReputacao(e.target.value as NivelReputacao)}
+            className="rounded-lg border border-border bg-bg-elevated px-2 py-2 text-xs text-text outline-none"
+          >
+            {Object.entries(REPUTACAO_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={faixaPreco}
+            onChange={(e) => setFaixaPreco(e.target.value as FaixaPreco)}
+            className="rounded-lg border border-border bg-bg-elevated px-2 py-2 text-xs text-text outline-none"
+          >
+            {Object.entries(FAIXA_PRECO_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button variant="secondary" className="self-start" onClick={aplicarPresetFrete}>
+          Aplicar preset ao subsídio de frete
+        </Button>
+      </div>
 
       <div className="flex flex-col gap-2">
         <span className="text-sm font-medium text-text">Taxas personalizadas</span>
