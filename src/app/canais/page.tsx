@@ -25,7 +25,9 @@ export default function CanaisPage() {
         <div>
           <h1 className="text-xl font-bold text-text">Canais</h1>
           <p className="text-sm text-text-muted">
-            As taxas de cada marketplace mudam com frequência — edite livremente.
+            Cada modalidade (Clássico, Premium, Full, FBA...) é um canal próprio e pode ser
+            comparada lado a lado no Comparador. As taxas são valores de referência — edite
+            livremente, pois cada plataforma muda as regras com frequência.
           </p>
         </div>
         <Button onClick={() => setAddingOpen((v) => !v)}>+ Canal personalizado</Button>

@@ -1,4 +1,4 @@
-import type { MarketplaceChannel } from "./types";
+import type { CustomFee, MarketplaceChannel } from "./types";
 
 /**
  * Valores iniciais aproximados, só para dar um ponto de partida realista.
@@ -8,6 +8,11 @@ import type { MarketplaceChannel } from "./types";
 type DefaultChannelSeed = Omit<MarketplaceChannel, "id" | "createdAt" | "updatedAt">;
 
 const now = () => new Date().toISOString();
+
+/** Cria uma linha de taxa personalizada (usada para fulfillment/armazenagem das modalidades Full/FBA). */
+function fee(nome: string, valor: number, tipo: CustomFee["tipo"] = "fixo"): CustomFee {
+  return { id: crypto.randomUUID(), nome, tipo, valor };
+}
 
 function seed(partial: Partial<DefaultChannelSeed> & { nome: string }): MarketplaceChannel {
   const ts = now();
@@ -35,8 +40,8 @@ function seed(partial: Partial<DefaultChannelSeed> & { nome: string }): Marketpl
 export function createDefaultChannels(): MarketplaceChannel[] {
   return [
     seed({
-      nome: "Mercado Livre",
-      comissaoPct: 0.14,
+      nome: "Mercado Livre Clássico",
+      comissaoPct: 0.12,
       taxaFixa: 6,
       custoFrete: 18,
       subsidioFrete: 10,
@@ -44,22 +49,51 @@ export function createDefaultChannels(): MarketplaceChannel[] {
       tipoCustoAds: "percentual",
     }),
     seed({
+      nome: "Mercado Livre Premium",
+      comissaoPct: 0.17,
+      taxaFixa: 6,
+      custoFrete: 18,
+      subsidioFrete: 10,
+      custoAds: 0.05,
+      tipoCustoAds: "percentual",
+    }),
+    seed({
+      nome: "Mercado Livre Full",
+      comissaoPct: 0.17,
+      taxaFixa: 6,
+      custoFrete: 0,
+      subsidioFrete: 0,
+      custoAds: 0.05,
+      tipoCustoAds: "percentual",
+      taxasPersonalizadas: [fee("Armazenagem/Full", 6)],
+    }),
+    seed({
       nome: "Shopee",
-      comissaoPct: 0.14,
+      comissaoPct: 0.2,
       taxaFixa: 4,
-      custoFrete: 12,
-      subsidioFrete: 8,
+      custoFrete: 20,
+      subsidioFrete: 20,
       custoAds: 0.04,
       tipoCustoAds: "percentual",
     }),
     seed({
-      nome: "Amazon",
+      nome: "Amazon FBM",
       comissaoPct: 0.15,
       taxaFixa: 5,
       custoFrete: 15,
       subsidioFrete: 6,
       custoAds: 0.06,
       tipoCustoAds: "percentual",
+    }),
+    seed({
+      nome: "Amazon FBA",
+      comissaoPct: 0.15,
+      taxaFixa: 5,
+      custoFrete: 0,
+      subsidioFrete: 0,
+      custoAds: 0.06,
+      tipoCustoAds: "percentual",
+      taxasPersonalizadas: [fee("Fulfillment FBA", 10)],
     }),
     seed({
       nome: "Magalu",
@@ -69,6 +103,16 @@ export function createDefaultChannels(): MarketplaceChannel[] {
       subsidioFrete: 7,
       custoAds: 0.03,
       tipoCustoAds: "percentual",
+    }),
+    seed({
+      nome: "Magalu Full",
+      comissaoPct: 0.16,
+      taxaFixa: 4,
+      custoFrete: 0,
+      subsidioFrete: 0,
+      custoAds: 0.03,
+      tipoCustoAds: "percentual",
+      taxasPersonalizadas: [fee("Fulfillment Magalu", 8)],
     }),
     seed({
       nome: "TikTok Shop",

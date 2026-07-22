@@ -11,6 +11,7 @@ export function ChannelCard({ channel }: { channel: MarketplaceChannel }) {
   const toggleAtivo = useChannelsStore((s) => s.toggleAtivo);
   const restoreDefault = useChannelsStore((s) => s.restoreDefault);
   const removeChannel = useChannelsStore((s) => s.removeChannel);
+  const duplicateChannel = useChannelsStore((s) => s.duplicateChannel);
 
   return (
     <details className="group rounded-xl border border-border bg-bg-elevated open:shadow-sm">
@@ -38,6 +39,9 @@ export function ChannelCard({ channel }: { channel: MarketplaceChannel }) {
       <div className="flex flex-col gap-3 border-t border-border px-4 py-4">
         <ChannelForm channel={channel} onChange={(patch) => updateChannel(channel.id, patch)} />
         <div className="flex justify-end gap-2">
+          <Button variant="secondary" onClick={() => duplicateChannel(channel.id)}>
+            Duplicar
+          </Button>
           {!channel.isCustom && (
             <Button variant="secondary" onClick={() => restoreDefault(channel.id)}>
               Restaurar padrão

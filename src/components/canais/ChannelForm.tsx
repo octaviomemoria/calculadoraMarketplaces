@@ -116,6 +116,14 @@ export function ChannelForm({
       </div>
     </div>
 
+      <p className="text-xs text-text-muted">
+        <strong className="text-text">Como modelar o frete:</strong> se o frete é grátis (você
+        paga), preencha &ldquo;Custo de frete&rdquo; com o valor cheio e &ldquo;Subsídio&rdquo; com
+        o que a plataforma cobre. Se o frete é pago pelo cliente, deixe &ldquo;Custo de frete&rdquo;
+        em 0 — ele não sai da sua margem. Para modalidades diferentes da mesma plataforma (Clássico,
+        Premium, Full, FBA...), use um canal separado para cada uma.
+      </p>
+
       <div className="flex flex-col gap-2 rounded-lg border border-warning-bg bg-warning-bg/40 p-3">
         <span className="text-sm font-medium text-text">Preset de frete grátis por reputação</span>
         <p className="text-xs text-text-muted">
