@@ -1,6 +1,8 @@
 import type { MercadoLivreConfig } from "./types";
 
-function required(env: NodeJS.ProcessEnv, name: string): string {
+type Environment = Record<string, string | undefined>;
+
+function required(env: Environment, name: string): string {
   const value = env[name]?.trim();
   if (!value) throw new Error(`Variável obrigatória ausente: ${name}`);
   return value;
@@ -20,7 +22,7 @@ function validHttpUrl(value: string, name: string): string {
   return url.toString().replace(/\/$/, "");
 }
 
-export function loadMercadoLivreConfig(env: NodeJS.ProcessEnv = process.env): MercadoLivreConfig {
+export function loadMercadoLivreConfig(env: Environment = process.env): MercadoLivreConfig {
   return {
     clientId: required(env, "MERCADOLIVRE_CLIENT_ID"),
     clientSecret: required(env, "MERCADOLIVRE_CLIENT_SECRET"),
