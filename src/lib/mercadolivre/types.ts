@@ -30,3 +30,15 @@ export interface MercadoLivreTokenResponse {
   refresh_token?: string;
   expires_in: number;
 }
+
+export interface ListingPricesRequest {
+  connectionId: string;
+  price: number;
+  categoryId: string;
+  listingTypeId: string;
+  currencyId?: string;
+  logisticType?: string;
+  shippingMode?: string;
+  billableWeight?: number;
+  tags?: string;
+}
