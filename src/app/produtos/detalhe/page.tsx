@@ -12,6 +12,10 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductForm } from "@/components/produtos/ProductForm";
 import { ResultSummaryCard } from "@/components/resultados/ResultSummaryCard";
 import { CostBreakdownBar } from "@/components/resultados/CostBreakdownBar";
+import {
+  isMercadoLivreChannelName,
+  MercadoLivrePanel,
+} from "@/components/mercadolivre/MercadoLivrePanel";
 import { useProductsStore } from "@/lib/store/useProductsStore";
 import { useChannelsStore } from "@/lib/store/useChannelsStore";
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
@@ -335,6 +339,13 @@ function ResultadosDoCanal({
 
       {!impossivel && targets.precoIdeal !== null && (
         <>
+          {isMercadoLivreChannelName(channel.nome) && (
+            <MercadoLivrePanel
+              apiBaseUrl={process.env.NEXT_PUBLIC_MERCADOLIVRE_API_BASE_URL ?? "https://calculadora.memoriaapps.site"}
+              price={valorPraticado > 0 ? valorPraticado : targets.precoIdeal}
+              cost={custoTotal}
+            />
+          )}
           <CostBreakdownBar breakdown={costBreakdown(valorPraticado > 0 ? valorPraticado : targets.precoIdeal, custoTotal, channel)} />
           <div className="flex flex-wrap items-center justify-between gap-2">
             <CopySummaryButton getText={getWhatsAppSummary} label="Copiar para WhatsApp" />
